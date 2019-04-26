@@ -10,21 +10,28 @@
 
 import numpy as np
 import pandas as pd
-from sklearn.preprocessing import Imputer,OneHotEncoder,LabelEncoder,LabelBinarizer
+from sklearn.preprocessing import Imputer, OneHotEncoder, LabelEncoder, LabelBinarizer
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
 
+# 1. 导入数值
 df = pd.read_csv('data.csv')
 X = df.iloc[:, :-1].values  # iloc与values是属性
 Y = df.iloc[:, -1].values
 print(Y)
-
+# 2. 数据解析
+# 解析X的制作目的:将第一维的字符串人名编码形成Onehot整型
 imputer = Imputer(missing_values='NaN', strategy='mean', axis=0)
 X[:, 1:3] = imputer.fit_transform(X[:, 1:3])
 x_labelencoder = LabelEncoder()
-X[:,0] = x_labelencoder.fit_transform(X[:,0])
+X[:, 0] = x_labelencoder.fit_transform(X[:, 0])
 print(X)
-x_onehot = OneHotEncoder(categorical_features=[0])
+x_onehot = OneHotEncoder(categorical_features=[0], sparse=False)
+X = x_onehot.fit_transform(X)  # 每个样本的维度 3-->3+2
+print(X)
 
 # oneHotEncode()类的使用 --> (n_values,  categorical_features,  dtype,  sparse,  handle_unknown)
+
 # 首先搞懂fit transform 以及 fit_transform 的用法比较:
 # fit是生成transform的信息,用于分析数据
 # transform是将fit后产生的数据形式适用于数据
@@ -46,6 +53,14 @@ x_onehot = OneHotEncoder(categorical_features=[0])
 
 # handle_unknown: 其值可以指定为 "error" 或者 "ignore"，即如果碰到未知的类别，是返回一个错误还是忽略它。
 
+# 标签制作
 lb = LabelBinarizer()
 Y = lb.fit_transform(Y)
 
+# 3.拆分数据集
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=0)
+
+# 4.特征量化(标准化过程)
+sc_X = StandardScaler()
+X_train = sc_X.fit_transform(X_train)
+X_test = sc_X.transform(X_test) # fit_transform已经fit过了,可以直接transform
