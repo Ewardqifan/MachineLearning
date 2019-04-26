@@ -61,6 +61,8 @@ Y = lb.fit_transform(Y)
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=0)
 
 # 4.特征量化(标准化过程)
-sc_X = StandardScaler()
+sc_X = StandardScaler() # 该函数只会移除方差和均值
 X_train = sc_X.fit_transform(X_train)
-X_test = sc_X.transform(X_test) # fit_transform已经fit过了,可以直接transform
+X_test = sc_X.transform(X_test)  # fit_transform已经fit过了,可以直接transform
+
+print('X_train:', X_train, 'X_test:', X_test)
