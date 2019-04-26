@@ -44,7 +44,7 @@ x_onehot = OneHotEncoder(categorical_features=[0])
 
 # sparse: 如果设置 False 与 transform后的.toarray()的参数效果相同
 
-# handle_unknown:
+# handle_unknown: 其值可以指定为 "error" 或者 "ignore"，即如果碰到未知的类别，是返回一个错误还是忽略它。
 
 lb = LabelBinarizer()
 Y = lb.fit_transform(Y)
