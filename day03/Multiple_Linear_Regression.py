@@ -40,7 +40,10 @@ y_pred = model.predict(x_test)
 
 plt.figure()
 N = np.arange(len(Y))
-plt.plot(N[0:len(y_train)], y_train, color='b', label='train')
-plt.plot(N[len(y_train):], y_test, color='g', label='test')
-plt.plot(N[len(y_train):], y_pred, color='r', label='pred')
+p_train = plt.plot(N[0:len(y_train)], y_train, color='b')
+print(type(p_train))  # 由此可知plt.plot返回的是一个列表其中只有一个对象
+p_test, = plt.plot(N[len(y_train):], y_test, color='g')
+p_pred, = plt.plot(N[len(y_train):], y_pred, color='r', linestyle='--')
+plt.legend(handles=[p_train[0], p_test, p_pred], labels=['train', 'test', 'pred'])
+plt.savefig('MLR')
 plt.show()
